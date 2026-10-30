@@ -1,0 +1,62 @@
+import Produto from '../models/Produto.js'
+import Cliente from '../models/Cliente.js'
+import Venda from '../models/Venda.js'
+
+export async function listarVendas() {
+    return await Venda.findAll({ order: [['id', 'ASC']] })
+}
+
+export async function buscarVendaPorId(id) {
+    return await Venda.findByPk(id)
+}
+
+export async function cadastrarVenda(dados, res) {
+    const clienteBuscado = await Cliente.findOne({
+        where: {
+            cpf:
+                dados.cpf_cliente
+        }
+    })
+
+    const produtoBuscado = await Produto.findOne({
+        where: {
+            nomep:
+                dados.nome_produto
+        }
+    })
+
+    if (clienteBuscado) {
+        if(produtoBuscado){
+            if(produtoBuscado.quantidade >= dados.quantidade_produto){
+               dados.quantidade_produto = Number(produtoBuscado.quantidade) - Number(dados.quantidade_produto);
+                const { cpf_cliente, nome_produto, quantidade_produto } = dados
+                await Produto.update({ quantidade: dados.quantidade_produto },
+                        { where: { nomep: dados.nome_produto } })
+                return Venda.create({ cpf_cliente, nome_produto, quantidade_produto })
+            }else{
+                res.status(400).json({ message: "Este produto não tem quantidade suficiente!" })
+            }
+        }else{
+            res.status(400).json({ message: "Produto não encontrado!" })
+        }
+    } else {
+        res.status(400).json({ message: "Cliente não encontrado!" })
+    }
+}
+
+export async function removerVenda(id,res, dados) {
+    const Venda = await buscarVendaPorId(id)
+    if (Venda) {
+        const produtoBuscado = await Produto.findOne({
+        where: {
+            nomep:
+                dados.nome_produto
+        }
+    })
+        produtoBuscado.quantidade += dados.quantidade_produto;
+        await Produto.update({ quantidade: produtoBuscado.quantidade },
+                        { where: { nomep: dados.nome_produto } })
+        Venda.destroy()
+    }
+    return Venda
+}

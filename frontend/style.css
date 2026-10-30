@@ -1,0 +1,95 @@
+body {
+    background-color: #e6e6e6;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.topo {
+    background-color: rgb(6, 102, 78);
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+}
+.topo h1 {
+    margin-bottom: 5px;
+}
+.menu {
+    text-align: center;
+    background-color: #d1d1d1;
+    padding: 10px;
+    font-weight: bold;
+}
+.menu a {
+    color: rgb(5, 163, 129);
+    text-decoration: none;
+    margin: 0 10px;
+}
+.menu a:hover {
+    text-decoration: underline;
+}
+.principal {
+    width: 80%;
+    background-color: #fff;
+    margin: 30px auto;
+    margin-left: 30px;
+    padding: 20px;
+    border: 2px solid black;
+}
+h2 {
+    color: rgb(5, 163, 129);
+    padding-bottom: 5px;
+     text-align: center;
+    margin: 20px auto;
+    width: 100%;
+    margin: 0px;
+}
+input {
+    width: 95%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid gray;
+}
+button {
+background: #798aa1;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:hover {
+    background-color: rgb(2, 3, 49);
+}
+
+input:hover{
+    background-color: rgb(224, 220, 213);
+}
+
+#lista-cliente{
+    width: 600px;
+    height: 1%;
+    align-items: flex-start;
+    text-align: left;
+    margin-right: 1000px;
+    margin-top: auto;
+}
+#lista-cliente2{
+    margin-left: 0px;
+}
+.principa{
+    align-items: center;
+    text-align: center;
+    margin: auto;
+}
+#listar{
+    width: 100%;
+    height: 100%;
+}
+#sla{
+    width: 100%;
+    height: 100%;
+}
+#sla2{
+    width: 100%;
+    height: 100%;
+}

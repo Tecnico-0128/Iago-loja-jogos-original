@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Vendas de Produtos</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="topo">
+        <h1>🎮 Loja de Jogos 🎮</h1>
+    </div>
+    <div class="menu">
+        --<a href="clientes.html" class="ativo">Clientes</a>--
+        <a href="produtos.html">Produtos</a>--
+        <a href="vendas.html">Vendas</a>--
+        <a href="controle.html">Controle</a>--
+        <a href="relatorio.html">Relatório</a>--
+        <a href="editar.html">Editar Cliente</a>--
+        <a href="compra.html">Comprar Produto</a>--
+    </div>
+    <div class="principal">
+        <div class="formulario-venda">
+            <h2>Cadastrar Compra</h2>      
+                <label>Nome do Produto:</label><br>
+                <input id="produtoa" type="text"><br><br>
+                <label>Quantidade:</label><br>
+                <input id="quantidadea" type="number" min="0"><br><br>
+                <button id="salvar" onclick="cadastrarco()">Salvar Compra</button>
+        </div>
+    </div>
+    <div class="principal" id="lista-compra"></div>
+</body>
+</html>
