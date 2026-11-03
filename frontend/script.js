@@ -102,55 +102,70 @@ function cadastrarv() {
             cliente = true;
             break;
         }
-    } if (cliente) {
-        let sla = false;
-        for (let p of produtos) {
-            i++;
-            if (p.nomep.toUpperCase() == produto.value.trim().toUpperCase()) {
-                sla = true;
-                break;
-            }
-        } if (sla) {
-            if (Number(quantidade2.value) > 0) {
-                if (produtos[i].quantidade >= Number(quantidade2.value)) {
-                    produtos[i].quantidade = Number(produtos[i].quantidade) - Number(quantidade2.value);
-                    const venda = {
-                        cpf2: cpf2.value,
-                        produto: produto.value,
-                        quantidade2: quantidade2.value
-                    }
-                    vendas.push(venda)
-                    localStorage.setItem("vendas", JSON.stringify(vendas))
-                    localStorage.setItem("produtos", JSON.stringify(produtos))
-                    alert("A venda do produto " + venda.produto + " foi cadastrada.")
-                    listarv();
-                    return;
-                } else {
-                    alert(`Este produto não tem estoque!`)
-                    return;
-                }
-            } else {
-                alert(`Deve se vender pelo menos um produto!`)
-                return;
-            }
+    }
+
+    if (!cliente) {
+        alert("Este produto ou cliente não está cadastrado!");
+        return;
+    }
+
+    let sla = false;
+    let indiceProduto = -1;
+    for (let p of produtos) {
+        i++;
+        if (p.nomep.toUpperCase() == produto.value.trim().toUpperCase()) {
+            sla = true;
+            indiceProduto = i;
+            break;
         }
     }
 
-    alert(`Este produto ou cliente não está cadastrado!`)
+    if (!sla) {
+        alert("Este produto ou cliente não está cadastrado!");
+        return;
+    }
+
+    if (Number(quantidade2.value) <= 0) {
+        alert("Deve se vender pelo menos um produto!");
+        return;
+    }
+
+    if (produtos[indiceProduto].quantidade < Number(quantidade2.value)) {
+        alert("Este produto não tem estoque!");
+        return;
+    }
+
+    produtos[indiceProduto].quantidade = Number(produtos[indiceProduto].quantidade) - Number(quantidade2.value);
+
+    const venda = {
+        cpf2: cpf2.value,
+        produto: produto.value,
+        quantidade2: quantidade2.value
+    };
+
+    vendas.push(venda);
+    localStorage.setItem("vendas", JSON.stringify(vendas));
+    localStorage.setItem("produtos", JSON.stringify(produtos));
+
+    alert("A venda do produto " + venda.produto + " foi cadastrada.");
+    listarv();
 }
+
 
 function cadastrarco() {
     let i = -1;
     let sla = false;
+    let indiceProduto = -1;
     for (let p of produtos) {
         i++;
         if (p.nomep.toUpperCase() == produtoa.value.trim().toUpperCase()) {
             sla = true;
+            indiceProduto = i;
             break;
         }
     } if (sla) {
         if (Number(quantidadea.value) > 0) {
-            produtos[i].quantidade = Number(produtos[i].quantidade) + Number(quantidadea.value);
+            produtos[indiceProduto].quantidade = Number(produtos[indiceProduto].quantidade) + Number(quantidadea.value);
             const compra = {
                 produtoa: produtoa.value,
                 quantidadea: quantidadea.value
@@ -169,6 +184,7 @@ function cadastrarco() {
         alert(`Este produto não está cadastrado!`)
     }
 }
+
 
 
 function buscar() {
