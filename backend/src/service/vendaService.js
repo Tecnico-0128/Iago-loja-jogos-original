@@ -60,3 +60,19 @@ export async function removerVenda(id,res, dados) {
     }
     return Venda
 }
+
+export async function atualizarVenda(id, dados, res) {
+    const {quantidade_produto } = dados
+    const VendaA = await buscarVendaPorId(id)
+    if(VendaA){
+                if (dados.quantidade_produto> 0) {
+                    await Venda.update({ quantidade_produto: quantidade_produto },
+                        { where: { id: id } })
+                    return res.status(200).json({ message: "Venda atualizado com sucesso!" })
+                } else {
+                    return res.status(400).json({ message: "A quantidade deve ser maior que zero!" })
+                }
+            }else{
+                return res.status(400).json({ message: "Venda nao encontrada!" })
+            }
+}

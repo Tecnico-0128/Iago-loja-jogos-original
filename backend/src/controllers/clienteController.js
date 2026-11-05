@@ -33,6 +33,6 @@ export async function atualizar (req,res) {
      if(!cliente){
         return res.status(404).json({message: "O cliente não foi encontrado."})
     }else{
-        return res.status(200).json(cliente)
+         return res.status(200).json(cliente)
     }
 }

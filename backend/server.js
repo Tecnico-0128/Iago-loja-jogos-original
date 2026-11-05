@@ -3,6 +3,7 @@ import clienteRouter from './src/routes/clienteRouter.js'
 import controleRouter from './src/routes/controleRouter.js'
 import produtoRouter from './src/routes/produtoRouter.js'
 import relatorioRouter from './src/routes/relatorioRouter.js'
+import compraRouter from './src/routes/compraRouter.js'
 import sequelize from './src/config/database.js'
 
 const app = express()
@@ -11,6 +12,7 @@ app.use('/cliente', clienteRouter)
 app.use('/produto', produtoRouter)
 app.use('/controle', controleRouter)
 app.use('/relatorio', controleRouter)
+app.use('/compra', compraRouter)
 try {
     await sequelize.authenticate()
     await sequelize.sync()

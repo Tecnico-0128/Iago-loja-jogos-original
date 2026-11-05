@@ -28,8 +28,8 @@ const dados = document.getElementById('lista-venda');
 
 const cpf3 = document.getElementById('cpf3');
 const dados3 = document.getElementById('lista-cliente2');
-
-function cadastrarc() {
+buscar_cliente()
+async function cadastrarc() {
     if (nome.value.trim() && cpf.value.trim()) {
         if (/^[A-Za-z\sÀ-ý]+$/.test(nome.value)) {
             if (/^\d{11}$/.test(cpf.value)) {
@@ -46,6 +46,11 @@ function cadastrarc() {
                         cpf: cpf.value
                     }
                     clientes.push(cliente)
+                    await fetch('http://localhost:3000/cliente/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(cliente)
+                    })
                     localStorage.setItem("clientes", JSON.stringify(clientes))
                     alert(cliente.nome + " esta cadastrado(a).")
                     listarc();
@@ -61,7 +66,7 @@ function cadastrarc() {
     }
 }
 
-function cadastrarp() {
+async function cadastrarp() {
     if (nomep.value.trim() && preco.value.trim() && quantidade.value.trim()) {
         if (/^\d+$/.test(quantidade.value) && !quantidade.value.includes("e") && !quantidade.value.includes("E")) {
             if (!preco.value.includes("e") && !preco.value.includes("E") && preco.value > -1) {
@@ -79,6 +84,11 @@ function cadastrarp() {
                         quantidade: quantidade.value
                     }
                     produtos.push(produto)
+                    await fetch('http://localhost:3000/produto/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(produto)
+                    })
                     localStorage.setItem("produtos", JSON.stringify(produtos))
                     alert(produto.nomep + " esta cadastrado(a).")
                     listare();
@@ -94,7 +104,7 @@ function cadastrarp() {
     }
 }
 
-function cadastrarv() {
+async function cadastrarv() {
     let i = -1;
     let cliente = false;
     for (let c of clientes) {
@@ -144,6 +154,7 @@ function cadastrarv() {
     };
 
     vendas.push(venda);
+    vender_produto();
     localStorage.setItem("vendas", JSON.stringify(vendas));
     localStorage.setItem("produtos", JSON.stringify(produtos));
 
@@ -152,7 +163,7 @@ function cadastrarv() {
 }
 
 
-function cadastrarco() {
+async function cadastrarco() {
     let i = -1;
     let sla = false;
     let indiceProduto = -1;
@@ -171,6 +182,7 @@ function cadastrarco() {
                 quantidadea: quantidadea.value
             }
             compras.push(compra)
+            add_produto();
             localStorage.setItem("compras", JSON.stringify(compras))
             localStorage.setItem("produtos", JSON.stringify(produtos))
             alert("A compra do produto " + compra.produtoa + " foi cadastrada.")
@@ -197,6 +209,7 @@ function buscar() {
     }
     if (sla) {
         dados3.innerHTML += `<p>${sla.nome}</p>`;
+        buscar_cliente();
     } else {
         alert("Cliente não encontrado!");
     }
@@ -213,6 +226,7 @@ function excluir() {
         }
     }
     if (sla) {
+        deletar_cliente();
         clientes.splice(i, 1);
         localStorage.setItem("clientes", JSON.stringify(clientes))
         alert("Cliente excluído com sucesso!")
@@ -239,6 +253,7 @@ function editar() {
             if (/^[A-Za-z\sÀ-ý]+$/.test(nome3.value)) {
                 clientes[i].nome = nome3.value;
                 localStorage.setItem("clientes", JSON.stringify(clientes))
+                editar_cliente();
                 alert("Operação bem-sucedida!");
             } else {
                 alert(`O nome só pode conter letras, espaços e acentos!`)
@@ -304,6 +319,7 @@ function limpar() {
     dados5.innerHTML = "";
     dados6.innerHTML = "";
     dados7.innerHTML = "";
+    dados8.innerHTML = "";
 }
 
 function listar() {
@@ -324,3 +340,85 @@ function listar() {
     }
 }
 listar();
+
+async function buscar_cliente() {
+    const busca = await fetch('http://localhost:3000/cliente')
+    const dados = await busca.json()
+    clientes.length = 0
+    clientes.push(...dados)
+    console.log(clientes)
+    if (dados4)
+        listarc();
+}
+buscar_cliente();
+
+async function editar_cliente() {
+    const c = await clientes.find(item => item.cpf === cpf3.value)
+    if (c) {
+        let cliente_atualizado = {
+            nome: nome3.value ?? c.nome,
+            cpf: cpf3.value ?? c.cpf
+        }
+        let resposta = await fetch(`http://localhost:3000/cliente/${c.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(cliente_atualizado)
+        })
+        buscar_cliente();
+    }
+}
+async function deletar_cliente() {
+    buscar_cliente()
+    const c = await clientes.find(item => item.cpf === cpf3.value)
+    if (c) {
+        let resposta = await fetch(`http://localhost:3000/cliente/${c.id}`, {
+            method: 'DELETE'
+        })
+        await buscar_cliente();
+    }
+}
+
+async function buscar_produto() {
+    const busca = await fetch('http://localhost:3000/produto')
+    const dados = await busca.json()
+    produtos.length = 0
+    produtos.push(...dados)
+    if (dados2)
+        listare();
+}
+buscar_produto()
+
+async function add_produto() {
+    const c = await produtos.find(item => item.nomep === produtoa.value)
+    if (c) {
+        let produto_atualizado = {
+            nomep: c.nomep,
+            preco: c.preco,
+            quantidade: c.quantidade
+        }
+        let resposta = await fetch(`http://localhost:3000/produto/${c.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(produto_atualizado)
+        })
+        buscar_produto();
+    }
+}
+
+async function vender_produto() {
+    const c = await produtos.find(item => item.nomep === produto.value)
+    if (c) {
+        let produto_atualizado = {
+            nomep: c.nomep,
+            preco: c.preco,
+            quantidade: c.quantidade
+        }
+        let resposta = await fetch(`http://localhost:3000/produto/${c.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(produto_atualizado)
+        })
+        buscar_produto();
+    }
+}
+

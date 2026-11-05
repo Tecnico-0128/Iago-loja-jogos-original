@@ -10,6 +10,7 @@ export async function buscarClientePorId(id) {
 }
 
 export async function cadastrarCliente(dados, res) {
+    console.log(dados)
     const cpf = dados.cpf
     const clienteBuscado = await Cliente.findOne({
         where: {
@@ -42,7 +43,7 @@ export async function removerCliente(id,res) {
     return Cliente
 }
 
-export async function atualizarCliente(id, dados, res) {
+export async function atualizarCliente(id, dados,res) {
     const { nome, cpf } = dados
     const ClienteA = await buscarClientePorId(id)
     
