@@ -20,10 +20,11 @@ const dados5 = document.getElementById('listar')
 const dados6 = document.getElementById('sla')
 const dados7 = document.getElementById('sla2')
 const dados8 = document.getElementById('sla3')
-const cpf2 = document.getElementById('cpf2');
-const produto = document.getElementById('produto');
+
+const cpf_cliente = document.getElementById('cpf_cliente');
+const nome_produto = document.getElementById('nome_produto');
 const vendas = JSON.parse(localStorage.getItem("vendas")) || []
-const quantidade2 = document.getElementById("quantidade2")
+const quantidade_produto = document.getElementById("quantidade_produto")
 const dados = document.getElementById('lista-venda');
 
 const cpf3 = document.getElementById('cpf3');
@@ -108,7 +109,7 @@ async function cadastrarv() {
     let i = -1;
     let cliente = false;
     for (let c of clientes) {
-        if (c.cpf == cpf2.value) {
+        if (c.cpf == cpf_cliente.value) {
             cliente = true;
             break;
         }
@@ -123,7 +124,7 @@ async function cadastrarv() {
     let indiceProduto = -1;
     for (let p of produtos) {
         i++;
-        if (p.nomep.toUpperCase() == produto.value.trim().toUpperCase()) {
+        if (p.nomep.toUpperCase() === nome_produto.value.trim().toUpperCase()) {
             sla = true;
             indiceProduto = i;
             break;
@@ -135,29 +136,33 @@ async function cadastrarv() {
         return;
     }
 
-    if (Number(quantidade2.value) <= 0) {
+    if (Number(quantidade_produto.value) <= 0) {
         alert("Deve se vender pelo menos um produto!");
         return;
     }
 
-    if (produtos[indiceProduto].quantidade < Number(quantidade2.value)) {
+    if (produtos[indiceProduto].quantidade < Number(quantidade_produto.value)) {
         alert("Este produto não tem estoque!");
         return;
     }
 
-    produtos[indiceProduto].quantidade = Number(produtos[indiceProduto].quantidade) - Number(quantidade2.value);
+    produtos[indiceProduto].quantidade = Number(produtos[indiceProduto].quantidade) - Number(quantidade_produto.value);
 
     const venda = {
-        cpf2: cpf2.value,
-        produto: produto.value,
-        quantidade2: quantidade2.value
+        cpf_cliente: cpf_cliente.value,
+        nome_produto: nome_produto.value,
+        quantidade_produto: quantidade_produto.value
     };
 
     vendas.push(venda);
+    await fetch('http://localhost:3000/venda/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(venda)
+    })
     vender_produto();
     localStorage.setItem("vendas", JSON.stringify(vendas));
     localStorage.setItem("produtos", JSON.stringify(produtos));
-
     alert("A venda do produto " + venda.produto + " foi cadastrada.");
     listarv();
 }
@@ -181,7 +186,13 @@ async function cadastrarco() {
                 produtoa: produtoa.value,
                 quantidadea: quantidadea.value
             }
+            console.log(produtoa.value)
             compras.push(compra)
+            await fetch('http://localhost:3000/compra/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(compra)
+            })
             add_produto();
             localStorage.setItem("compras", JSON.stringify(compras))
             localStorage.setItem("produtos", JSON.stringify(produtos))
@@ -269,7 +280,7 @@ function editar() {
 function listarv() {
     dados.innerHTML = "Cadastrados:"
     for (let venda of vendas) {
-        dados.innerHTML += `<p>CPF: ${venda.cpf2} | Nome do produto: ${venda.produto} | Quantidade vendida: ${venda.quantidade2}</p>`
+        dados.innerHTML += `<p>CPF: ${venda.cpf_cliente} | Nome do produto: ${venda.nome_produto} | Quantidade vendida: ${venda.quantidade_produto}</p>`
     }
 }
 
@@ -406,7 +417,7 @@ async function add_produto() {
 }
 
 async function vender_produto() {
-    const c = await produtos.find(item => item.nomep === produto.value)
+    const c = await produtos.find(item => item.nomep === nome_produto.value)
     if (c) {
         let produto_atualizado = {
             nomep: c.nomep,
@@ -421,4 +432,3 @@ async function vender_produto() {
         buscar_produto();
     }
 }
-

@@ -18,7 +18,6 @@ export async function cadastrarCompra(dados, res) {
     })
         if(produtoBuscado){
             if(dados.quantidadea > 0){
-               dados.produtoa = Number(produtoBuscado.quantidade) + Number(dados.quantidadea);
                 const {produtoa, quantidadea } = dados
                 await Produto.update({ quantidade: dados.quantidadea },
                         { where: { nomep: dados.produtoa} })
@@ -40,7 +39,6 @@ export async function removerCompra(id,res, dados) {
                 dados.produtoa
         }
     })
-        produtoBuscado.quantidade -= dados.quantidadea;
         await Produto.update({ quantidade: produtoBuscado.quantidade },
                         { where: { nomep: dados.produtoa } })
         Compra.destroy()

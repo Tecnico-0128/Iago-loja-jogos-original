@@ -28,10 +28,7 @@ export async function cadastrarVenda(dados, res) {
     if (clienteBuscado) {
         if(produtoBuscado){
             if(produtoBuscado.quantidade >= dados.quantidade_produto){
-               dados.quantidade_produto = Number(produtoBuscado.quantidade) - Number(dados.quantidade_produto);
                 const { cpf_cliente, nome_produto, quantidade_produto } = dados
-                await Produto.update({ quantidade: dados.quantidade_produto },
-                        { where: { nomep: dados.nome_produto } })
                 return Venda.create({ cpf_cliente, nome_produto, quantidade_produto })
             }else{
                 res.status(400).json({ message: "Este produto não tem quantidade suficiente!" })
@@ -53,9 +50,6 @@ export async function removerVenda(id,res, dados) {
                 dados.nome_produto
         }
     })
-        produtoBuscado.quantidade += dados.quantidade_produto;
-        await Produto.update({ quantidade: produtoBuscado.quantidade },
-                        { where: { nomep: dados.nome_produto } })
         Venda.destroy()
     }
     return Venda

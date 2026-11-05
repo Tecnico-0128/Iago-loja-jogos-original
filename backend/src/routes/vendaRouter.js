@@ -1,4 +1,4 @@
-import * as vendaController from '../controllers/vendaController.js'
+import * as vendaController from '../controllers/vendasController.js'
 import { Router } from 'express'
 
 const router = Router()
