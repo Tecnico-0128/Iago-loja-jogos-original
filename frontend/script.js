@@ -163,7 +163,7 @@ async function cadastrarv() {
     vender_produto();
     localStorage.setItem("vendas", JSON.stringify(vendas));
     localStorage.setItem("produtos", JSON.stringify(produtos));
-    alert("A venda do produto " + venda.produto + " foi cadastrada.");
+    alert("A venda do produto " + venda.nome_produto + " foi cadastrada.");
     listarv();
 }
 
