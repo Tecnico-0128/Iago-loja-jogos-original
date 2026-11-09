@@ -210,7 +210,8 @@ async function cadastrarco() {
 
 
 
-function buscar() {
+async function buscar() {
+    await buscar_cliente();
     let sla = null;
     for (let c of clientes) {
         if (c.cpf === cpf3.value) {
@@ -219,12 +220,12 @@ function buscar() {
         }
     }
     if (sla) {
-        dados3.innerHTML += `<p>${sla.nome}</p>`;
-        buscar_cliente();
+        dados3.innerHTML = `<p>Nome: ${sla.nome} | CPF: ${sla.cpf}</p>`;
     } else {
         alert("Cliente não encontrado!");
     }
 }
+
 
 function excluir() {
     let sla = false;
@@ -249,11 +250,10 @@ function excluir() {
     }
 }
 
-function editar() {
+async function editar() {
+    await buscar_cliente();
     let sla = null;
-    let i = -1;
     for (let c of clientes) {
-        i++;
         if (c.cpf === cpf3.value) {
             sla = c;
             break;
@@ -262,12 +262,26 @@ function editar() {
     if (sla) {
         if (nome3.value.trim()) {
             if (/^[A-Za-z\sÀ-ý]+$/.test(nome3.value)) {
-                clientes[i].nome = nome3.value;
-                localStorage.setItem("clientes", JSON.stringify(clientes))
-                editar_cliente();
-                alert("Operação bem-sucedida!");
+                let cliente_atualizado = {
+                    nome: nome3.value,
+                    cpf: sla.cpf
+                };
+                let resposta = await fetch(`http://localhost:3000/cliente/${sla.id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(cliente_atualizado)
+                });
+                if (resposta.ok) {
+                    alert("Operação bem-sucedida!");
+                    nome3.value = "";
+                    cpf3.value = "";
+                    dados3.innerHTML = "";
+                    await buscar_cliente();
+                } else {
+                    alert("Erro ao editar cliente!");
+                }
             } else {
-                alert(`O nome só pode conter letras, espaços e acentos!`)
+                alert("O nome só pode conter letras, espaços e acentos!");
             }
         } else {
             alert("O novo nome não pode ser vazio!");

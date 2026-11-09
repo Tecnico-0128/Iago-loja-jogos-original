@@ -1,99 +1,76 @@
+
 body {
-    background-color: #e6e6e6;
+    background-color: #725555;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-}
-.topo {
-    background-color: rgb(6, 102, 78);
     color: #fff;
+    background: url(imagem.jpg);
+}
+
+.topo {
+    background-color: #111111;
+    color: #D4AF37;
     text-align: center;
     padding: 20px;
 }
+
 .topo h1 {
     margin-bottom: 5px;
 }
+
 .menu {
     text-align: center;
-    background-color: #d1d1d1;
+    background-color: #292929;
     padding: 10px;
     font-weight: bold;
 }
+
 .menu a {
-    color: rgb(5, 163, 129);
+    color: #D4AF37;
     text-decoration: none;
     margin: 0 10px;
+    padding: 8px;
 }
+
 .menu a:hover {
+    background-color:#D4AF37 ;
+    color: #171717;
     text-decoration: underline;
 }
+
 .principal {
-    width: 80%;
-    background-color: #fff;
+    width: 500px;
+    background-color: #222222;
     margin: 30px auto;
-    margin-left: 30px;
     padding: 20px;
-    border: 2px solid black;
+    border: 2px solid #D4AF37;
 }
+
 h2 {
-    color: rgb(5, 163, 129);
+    color: #D4AF37;
+    border-bottom: 1px dashed #D4AF37;
     padding-bottom: 5px;
-     text-align: center;
-    margin: 20px auto;
-    width: 100%;
-    margin: 0px;
 }
+
 input {
     width: 95%;
     padding: 8px;
     margin-top: 5px;
-    border: 1px solid gray;
+    border: 1px solid #D4AF37;
+    background-color: #171717;
+    color: #fff;
 }
+
 button {
-background: #798aa1;
-  color: white;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+    background-color: #D4AF37;
+    color: #171717;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
 }
+
 button:hover {
-    background-color: rgb(2, 3, 49);
-}
-
-input:hover{
-    background-color: rgb(224, 220, 213);
-}
-
-#lista-cliente{
-    width: 600px;
-    height: 1%;
-    align-items: flex-start;
-    text-align: left;
-    margin-right: 1000px;
-    margin-top: auto;
-}
-#lista-cliente2{
-    margin-left: 0px;
-}
-.principa{
-    align-items: center;
-    text-align: center;
-    margin: auto;
-}
-#listar{
-    width: 100%;
-    height: 100%;
-}
-#sla{
-    width: 100%;
-    height: 100%;
-}
-#sla2{
-    width: 100%;
-    height: 100%;
-}
-#sla3{
-    width: 100%;
-    height: 100%;
+    background-color: #B8962E;
 }
