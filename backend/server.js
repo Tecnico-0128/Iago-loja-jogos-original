@@ -7,7 +7,11 @@ import compraRouter from './src/routes/compraRouter.js'
 import vendaRouter from './src/routes/vendaRouter.js'
 import sequelize from './src/config/database.js'
 
+
 const app = express()
+app.get('/health', (req, res) =>{
+    res.json({message: 'Servidor funcionando.' , success: true})
+})
 app.use(express.json())
 app.use('/cliente', clienteRouter)
 app.use('/produto', produtoRouter)
